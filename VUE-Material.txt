@@ -1,0 +1,581 @@
+Pre knowledge.
+
+1.HTML 5
+2.CSS 3
+3.Javascript - ES 5 and ES 6
+4.node js fundamentals - npm
+....................................................................................
+				Vue.js
+...................................................................................
+
+What is Vue.js?
+ Vue.js is a javascript framework for building user interfaces.
+
+User interface could be browser,mobile apps,other device based apps.
+
+Vue is more popular for building browser based web applications.
+
+
+What are different types of Web Applications?
+
+Web History
+https://home.web.cern.ch/science/computing/birth-web
+
+Server side web apps
+1.static web apps - 1989 to 1995
+   -HTML
+2.Dynamic content generation web app -1996 to till date
+   -CGI - C/Perl
+   -J2EE - Java,JavaServlets
+   -ASP  - Vbscript,VB
+   -PHP  - Php
+output : HTML
+ etc.....
+3.Web Services - ECOMMERCE(B2 to B2) - 1998 To till date
+  DATA is exchanged between two systems 
+  Common data formats
+   -XML - SOAP web services
+  -Multi format(JSON)- RESTFull Web Services / GraphQL    
+
+Client side web apps
+
+Netscap communication introduced a web browser called "Navigator".
+
+Navigator started failing down once microsoft announced free browser in 1995 as part of win 95 os.
+
+Natscap started entering in to server side market,but again failed.
+
+1995 netscap team started thinking about new technology- how to process "html pages" in the client side after rendering - Client side web apps.
+
+
+Client Side Web Architecture:
+
+Browser-HTML
+
+............................................................................................
+				Internals of HTML Representation
+..........................................................................................
+
+HTML is programming language -  DSL pl /declarative pl.
+
+index.html -source code
+
+HTML is programming language -  DSL pl /declarative pl.
+
+index.html -source code
+
+HTML is programming language -  DSL pl /declarative pl.
+
+index.html -source code
+
+<html>
+<head></head>
+<title><title>
+<body>
+  <div>
+     <h1>Welcome</h1>
+  </div>
+</body>
+</html>
+-------------------Browser
+loader---LOAD Code into browser
+ |
+   from file: or http:
+ |
+Parser : Parser is special compiler which converts source into lexcial tree(string tree)
+ |
+body
+  div
+     h1
+        Welcome 
+     h1
+  div
+body
+|
+ Complier-Compilation : Convert this into assembly
+|
+body -load xxx
+  div
+     h1
+        Welcome 
+     h1
+  div
+body
+..............................................................................................
+				Runtime  -  Allocate Memory for HTML
+...........................................................................................				
+HTML Execution engine : Request Os ,to allocate memory :Runtime
+
+-LinkedList - c
+
+body -Node
+  div -Node
+     h1 -Node
+        Welcome -Node
+     h1
+  div
+body
+
+-Nodes are connected each other in hierachical structure(tree)
+ 
+Linking the Nodes: Tree (c)
+
+body  -Node
+  |
+  div -Node
+    |
+     h1 -Node
+      |
+        Welcome -Node
+        |
+     h1
+  div
+body
+ |
+ |
+Layout/Paint Engine: will convert nodes into pxs : final output
+...................................................................................
+			Nets cap and HTML Tree
+
+Netscap started a project, to access rendered tree via program, to process(add,update,delete,iterate)
+
+Netscap initally decided to introduce java program to access the tree, but since java was not suitable, netscap decided to create java like programming language - birth of javascript.
+
+Java script language looks the HTML tree as objects - Object oriented HTML, every html element can be thought as object. - body - body object, div element-div object
+
+Once the html has been rendered by the web browser, can we change the html(adding new element,updating existing element content,removing node,listing nodes).
+
+The company called Netscap communcation, the second web browser creator after line mode web browser.
+
+The NetsCap communication introduced the browser called netscap navigator , today firefox.
+
+The netscap introduced a new technology called how to change html after rendering.
+
+In 1996,Netscap communication,Started an RND project called "How to manipulate the tree"
+
+Tree is written in c language,then we need another c program to communicate.
+
+But NETSCAP decided not to use C pl.
+
+Netscap wanted to put java like implementation inside browser to manipulate "Tree".
+
+                        "The birth of Javascript"
+
+How to access nodes from javascript engine?
+  
+One spec was published ,As per that spec
+ "Document Object Model"
+    -How to represent document(elements/nodes) in object oriented way.->DOM
+
+ "Documents can be represented as Objects" : Object oriented Document Programming.
+
+..............................................................................................
+				Birth of Frameworks and libs
+
+
+
+............................................................................................
+How dom works?
+
+index.html           Broser runtime(C program)         Javascript Engine
+<h1>Hello</h1>       h1-Node                           h1- Object
+			Hello-Node			 Hello Object Property
+
+
+
+                Every Html ELEMENT Inside Browser is "C Program"
+
+	        Every Html ELEMENT javascript engine is "Object"
+
+
+javascript developer ---->uses api --->to communicate Object---->js engine---->browser engine.
+
+.............................................................................................
+				DOM Programming
+.............................................................................................
+
+How to implement dom programming?
+
+1.using plain js
+  if we use plain js , it is very difficult to build large applications
+
+2.using frameworks and libs
+
+2000 - The first javascript framework - DOJO
+2002-2005 - JQuery - is the second most powerfull dom lib.
+After 2006 - many js libs and frameworks introduced.. 2008(Angular js) 2013(react)...
+
+Popular DOM frameworks/lib:
+1.React
+2.Angular
+3.Vue.js
+.....................................................................................
+How to build client side web app?
+
+1.Enchancing html(genereated by server) by adding javascript /js lib(jquery)
+2.Web component model.
+ https://developer.mozilla.org/en-US/docs/Web/Web_Components
+3.SPA - Single Page Web Arch
+4.Full Stack/SSR(Server side rendering)
+5.JamStack/SSG(Static Site Generation)
+6.Mobile,desktop,WebGL
+
+
+Based on ,use case we can pickup any one of the methods to build client side web apps, but most popular one is SPA,SSR
+
+Vue js can be used to build any type of client side web apps(spa,ssr,ssg)
+
+implementation
+
+1.Standalone Script
+
+Vue can be used as a standalone script file - no build step required! If you have a backend framework already rendering most of the HTML, or your frontend logic isn't complex enough to justify a build step, this is the easiest way to integrate Vue into your stack. You can think of Vue as a more declarative replacement of jQuery in such cases
+
+
+=>It is old model of writing code.
+=>server always creates html pages , sends html to browser
+=>Client side we need to submit forms
+   we need to validate the forms-js can be used.
+   some animations 
+   if you want to submit forms to the server for processing some data
+   (ajax)
+
+Technologies:
+  jQuery
+  Vue.js
+
+2.Single-Page Application (SPA):
+Some applications require rich interactivity and non-trivial stateful logic on the frontend. The best way to build such applications is to use an architecture where Vue not only controls the entire page, but also handles data updates and navigation without having to reload the page. This type of application is typically referred to as a Single-Page Application (SPA).
+
+SPAs typically require the backend to expose API endpoints - but you can also pair Vue with solutions like Inertia.js to get the SPA benefits while retaining a server-centric development model.
+
+Fullstack / SSR
+
+Pure client-side SPAs are problematic when the app is sensitive to SEO and time-to-content. This is because the browser will receive a largely empty HTML page, and has to wait until the JavaScript is loaded before rendering anything.
+
+Vue provides first-class APIs to "render" a Vue app into HTML strings on the server. This allows the server to send back already-rendered HTML, allowing end users to see the content immediately while the JavaScript is being downloaded. Vue will then "hydrate" the application on the client side to make it interactive. This is called Server-Side Rendering (SSR) and it greatly improves Core Web Vital metrics such as Largest Contentful Paint (LCP).
+
+There are higher-level Vue-based frameworks built on top of this paradigm, such as Nuxt, which allow you to develop a fullstack application using Vue and JavaScript.
+
+
+JAMStack / SSG#
+Server-side rendering can be done ahead of time if the required data is static. This means we can pre-render an entire application into HTML and serve them as static files. This improves site performance and makes deployment a lot simpler since we no longer need to dynamically render pages on each request. Vue can still hydrate such applications to provide rich interactivity on the client. This technique is commonly referred to as Static-Site Generation (SSG), also known as JAMStack.
+
+The Vue team maintains a static-site generator called VitePress, which powers this website you are reading right now! In addition, Nuxt also supports SSG. You can even mix SSR and SSG for different routes in the same Nuxt app.
+
+
+Beyond the Web:
+...............
+
+Although Vue is primarily designed for building web applications, it is by no means limited to just the browser. You can:
+
+Build desktop apps with Electron or Tauri
+Build mobile apps with Ionic Vue
+Build desktop and mobile apps from the same codebase with Quasar
+Use Vue's Custom Renderer API to build custom renderers targeting WebGL or even the terminal!
+
+
+
+App selections:
+
+Whether your app is legacy server side apps built using j2ee or .net,php,rails--->
+ Standalone vue.js
+
+Your app is api centeric(webservices)/microservices
+
+Vue can be used as "SPA"
+
+SPA With SSR for better optimization and SEO ready
+
+SPA and SSR With SSG/JAM Stack - where your app is having static data
+
+
+Getting started with Vue:
+........................
+
+
+Getting started with Vue:
+........................
+
+Project Setup:
+..............
+
+1.without build tools
+
+2.with build tools
+
+
+1.without build tools
+
+Steps:
+
+1.create Project
+
+>mkdir vue-legacy
+
+vue-legacy>mkdir src
+
+create index.html outside src dir
+
+index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue-legacy</title>
+</head>
+<body>
+    
+</body>
+</html>
+
+in order to integrate vue with existing html
+
+you have to add script which is distributed by vue community via "cdn".
+
+There are two builds:
+1.dev build
+2.prod build
+
+
+Dev Build
+
+<script src="https://unpkg.com/vue@3"></script>
+
+You are running a development build of Vue.
+Make sure to use the production build (*.prod.js) when deploying for production.
+
+
+Prod Build
+ <script src="https://unpkg.com/vue@3.1.1/dist/vue.global.prod.js"></script>
+
+index.html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue-legacy</title>
+    <!-- This is dev build -->
+    <script src="https://unpkg.com/vue@3"></script>
+    <!-- This is production build -->
+    <!-- <script src="https://unpkg.com/vue@3.1.1/dist/vue.global.prod.js"></script> -->
+</head>
+<body>
+   
+</body>
+
+</html>
+
+
+....................................................................................
+				Vue Application
+....................................................................................
+
+Vue is just javascript framework, offers apis,infrastructure to build "DOM" programming.
+
+DOM Programming:
+1.create element or elements 
+   When we create elements we create tree model-DOM tree
+2.update existing elements content
+3.remove/delete existing element content and element itself
+4.list/walk through tree
+5.we may change style dynamically
+6.we interact with ui and change the ui.
+
+
+Vue is javascript dom programming framework 
+
+There are two ways of programming in UI:
+
+1.imperative programming
+    The way of write program using complex logics, more boiler plate code.
+eg:
+  create element using plain js
+  create element using jQuery
+
+   <div id="root">
+
+    </div>
+    <script>
+        function createElement() {
+            console.log('create Element')
+            const Heading = document.createElement('h1')
+            Heading.innerHTML = 'Hello DOM!'
+            Heading.style.color = 'blue'
+            document.getElementById('root').appendChild(Heading)
+        }
+        createElement();
+    </script>
+
+2.declarative programming
+
+ =>write less code
+ =>Abstract DOM apis with readable constructs 
+ =>introduce declarative templates
+
+Note:
+ Template driven technology introduced in server side computing in 1990's
+ 2006, the first template driven technology was introduced in javascript called
+ mustache.js ( {{}}})
+ Template = static + dynamic  content , where dynamic content is interpolated into code. 
+ eg <h1>Hello {{name}} </h1>
+
+ "Vue is based on declarative , which extends standard HTML with a template syntax"
+				+
+			   java script => binds the state(data)
+
+...................................................................................
+How Vue represents UI?
+
+=>Vue creates UI dynamically(DOM)
+=>Vue Organizes the UI into Smaller and Smaller UI
+=>Vue Breaks complex UI into Smaller UI
+   This model is called Composition
+
+
+
+How Vue represents UI?
+
+=>Vue creates UI dynamically(DOM)
+=>Vue Organizes the UI into Smaller and Smaller UI
+=>Vue Breaks complex UI into Smaller UI
+   This model is called Composition
+
+Why Composition?
+=>The UI can be reused any where in the app.
+=>The code maintaince is very easy,because it is independant.
+
+           This arch is called as "component driven arch"
+
+Steps:
+
+1.create Application Object
+
+Pro Vue 3.
+var app = new Vue({   })
+    
+Vue 3:
+
+1.1.Get Vue Instance
+
+We can get Vue Instance 
+
+A.Via Global Vue variable
+B.Via ES 6 modules
+
+....................................................................................
+			A.Via Global Vue variable
+...................................................................................
+
+Vue is Root Instance having lot methods (factory methods)
+
+createApp: (...args) => {…}
+createBlock: ƒ createBlock(type, props, children, patchFlag, dynamicProps)
+createCommentVNode: ƒ createCommentVNode(text = '', // when used as the v-else branch, the comment node must be created as a // block to ensure correct updates. asBlock = false)
+createElementBlock: ƒ createElementBlock(type, props, children, patchFlag, 
+
+etc..
+
+1.2. call method called createApp
+
+Creates an application instance.
+
+function createApp(rootComponent: Component, rootProps?: object): App
+
+const app = createApp()
+
+console.log(app)
+
+Application Object methods:
+............................
+
+component: ƒ component(name, component)
+config: (...)
+directive: ƒ directive(name, directive)
+mixin: ƒ mixin(mixin)
+mount: (containerOrSelector) => {…}
+provide: ƒ provide(key, value)
+unmount: ƒ unmount()
+use: ƒ use(plugin, ...options)
+version: "3.2.36"
+_component: {}
+_container: null
+_context: {app: {…}, config: {…}, mixins: Array(0), components: {…}, directives: {…}, …}
+_instance: null
+_props: null
+_uid: 0
+
+
+       //way -1
+        //     //get Vue Instance
+        //  const vue  = Vue
+        // // console.log(vue)
+        // const app = vue.createApp()
+        // console.log(app)
+        //way -2
+        // const app = Vue.createApp()
+        // console.log(app)
+        //way - 3 : es 6 destructuring syntax
+        const { createApp } = Vue
+        const app = createApp()
+        console.log(app)
+
+.....................................................................................
+				B.Via ES 6 modules
+....................................................................................
+
+Scripts should imported using "importmap" of script tag
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E6 Modules-without Build tools</title>
+    <!-- Poly file for import maps -->
+    <script async src="https://ga.jspm.io/npm:es-module-shims@1.5.5/dist/es-module-shims.js"></script>
+</head>
+
+<body>
+    <div id="app">
+
+    </div>
+    <script type="importmap">
+        {
+          "imports": {
+            "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+          }
+        }
+    </script>
+    <script type="module">
+        import { createApp } from 'vue'
+        const app = createApp()
+        console.log(app)
+    </script>
+
+</body>
+
+</html>
+
+
+Note:
+Import Maps Browser Support
+
+Import maps are supported by default in Chromium-based browsers, so we recommend using Chrome or Edge during the learning process.
+
+If using Firefox, it is only supported in version 102+ and currently needs to be enabled via the dom.importMaps.enabled option in about:config.
+
+If your preferred browser does not support import maps yet, you can polyfill it with es-module-shims.
+
+    <script async src="https://ga.jspm.io/npm:es-module-shims@1.5.5/dist/es-module-shims.js"></script>
+
+Not for production
+
+The import-maps-based setup is meant for learning only - if you intend to use Vue without build tools in production, make sure to check out the Production Deployment Guide.
