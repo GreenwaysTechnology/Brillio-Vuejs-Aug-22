@@ -1,6 +1,19 @@
+//root Component
+export default  {
+    template: ` 
+        <div>
+              <h1>Welcome to Vue App!</h1>
+        </div>
+    
+    `
+}
 
-//Get create App function from Vue Object by destructrucing
-const { createApp } = Vue
-//create Vue Application Object which represents vue app
-const app = createApp()
-console.log(app)
+// const App  = {
+//     template: ` 
+//         <div>
+//               <h1>Welcome to Vue App!</h1>
+//         </div>
+    
+//     `
+// }
+// export default App;

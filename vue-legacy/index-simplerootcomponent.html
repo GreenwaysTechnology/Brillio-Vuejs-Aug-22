@@ -24,9 +24,19 @@
     </script>
     <script type="module">
         import { createApp } from 'vue'
-        import App from './src/App.js'
+
+        //root Component
+        const rootComponent = {
+            template:` 
+                <div>
+                      <h1>Welcome to Vue App!</h1>
+                </div>
+            
+            `
+
+        }
         //application object
-        const app = createApp(App)
+        const app = createApp(rootComponent)
         console.log(app)
         //create dom element and insert into root element <div id="root"></div>
         app.mount("#app")

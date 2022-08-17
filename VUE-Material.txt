@@ -58,13 +58,6 @@ Browser-HTML
 
 HTML is programming language -  DSL pl /declarative pl.
 
-index.html -source code
-
-HTML is programming language -  DSL pl /declarative pl.
-
-index.html -source code
-
-HTML is programming language -  DSL pl /declarative pl.
 
 index.html -source code
 
@@ -101,7 +94,7 @@ body -load xxx
      h1
   div
 body
-..............................................................................................
+.....................................................................................
 				Runtime  -  Allocate Memory for HTML
 ...........................................................................................				
 HTML Execution engine : Request Os ,to allocate memory :Runtime
@@ -293,10 +286,6 @@ SPA and SSR With SSG/JAM Stack - where your app is having static data
 Getting started with Vue:
 ........................
 
-
-Getting started with Vue:
-........................
-
 Project Setup:
 ..............
 
@@ -437,15 +426,6 @@ How Vue represents UI?
 =>Vue Breaks complex UI into Smaller UI
    This model is called Composition
 
-
-
-How Vue represents UI?
-
-=>Vue creates UI dynamically(DOM)
-=>Vue Organizes the UI into Smaller and Smaller UI
-=>Vue Breaks complex UI into Smaller UI
-   This model is called Composition
-
 Why Composition?
 =>The UI can be reused any where in the app.
 =>The code maintaince is very easy,because it is independant.
@@ -579,3 +559,654 @@ If your preferred browser does not support import maps yet, you can polyfill it 
 Not for production
 
 The import-maps-based setup is meant for learning only - if you intend to use Vue without build tools in production, make sure to check out the Production Deployment Guide.
+..................................................................................
+			    Root Component(Root Element)
+...................................................................................
+
+  In tree structure, root element must be necessary, in vue every element is created by component, so we need  root Component.
+
+In React:
+ function Logo(){
+   
+   return <img src="logo.png"/>
+ 
+}
+In Angular
+
+ @Component({
+   selector:'app-logo'
+   template:`<img src="logo.png"/>
+ }) 
+ export class Logo{
+
+ }
+In Vue:
+ Component is object which is represented as literal object.
+
+const Logo ={
+
+}
+
+What component contains:
+ component information can be categorized into various segments
+
+1.UI/Rendering - HTML,CSS(Markup)
+..................................
+ template
+ render
+ compilerOptions
+
+2.State -(data) - javascript
+ data 
+ props
+ computed
+ methods
+ watch
+ emits
+ expose
+
+3.Life Cycle hooks(methods)
+beforeCreate
+created
+beforeMount
+mounted
+beforeUpdate
+updated
+beforeUnmount
+unmounted
+errorCaptured
+renderTracked
+renderTriggered
+activated
+deactivated
+serverPrefetch
+
+4.Composition
+ provide
+ inject
+ mixins
+ extends
+Misc
+
+name
+inheritAttrs
+components
+directives
+
+Component Instance api
+
+$data
+$props
+$el
+$options
+$parent
+$root
+$slots
+$refs
+$attrs
+$watch()
+$emit()
+$forceUpdate()
+$nextTick()
+.....................................................................................
+				Vue Coding Style
+....................................................................................
+				
+Vue coding can be classified into two category
+
+Options api based style - old vue(Vue 2.x)
+
+Composition api based style - new Vue(Vue 3.x)
+				
+..............................................................................
+
+Template:
+ => It is html along with some special instructions
+ => It is compiled into sequence of java script methods by vue compilers
+ => Every component will have template
+ => root component uses container element as template
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Root Component</title>
+  <!-- Poly file for import maps -->
+  <script async src="https://ga.jspm.io/npm:es-module-shims@1.5.5/dist/es-module-shims.js"></script>
+  <script type="importmap">
+        {
+          "imports": {
+            "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+          }
+        }
+    </script>
+</head>
+
+<body>
+  <div id="app">
+
+  </div>
+
+  <script type="module">
+    import { createApp } from 'vue'
+
+    const rootComponent = {
+      template: `
+             <h1>Welcome to Vue App</h1>
+             <p>How are you?</p>
+      `
+    }
+    const app = createApp(rootComponent)
+
+    //rendering root Component on existing dom tree
+    app.mount('#app')
+  </script>
+
+</body>
+
+</html>
+
+...................................................................................
+			  How to write modular code
+
+1.you have to write application component in a separate folders and files
+
+src
+ |
+ components
+    |
+    App.js
+index.html
+
+src/App.js
+export default {
+    template: `
+        <div>
+             <h1>Vue App</h1>
+        </div>
+    `
+}
+index.html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Root Component</title>
+    <!-- Poly file for import maps -->
+    <script async src="https://ga.jspm.io/npm:es-module-shims@1.5.5/dist/es-module-shims.js"></script>
+    <script type="importmap">
+        {
+          "imports": {
+            "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+          }
+        }
+    </script>
+</head>
+
+<body>
+    <div id="app">
+
+    </div>
+
+    <script type="module">
+        import { createApp } from 'vue'
+        import App from './src/App.js'
+        createApp(App).mount('#app')
+    </script>
+
+</body>
+
+</html>
+			.....................................................................................
+			How to setup vue Apps using Build Tools
+.....................................................................................
+
+Build tools:
+ Which are javascript based tools for create,manage java script apps
+ Build tools are based on npm tool.
+
+Build tools:
+ Webpack
+ rollup
+
+.....................................................................................
+			How to setup vue Apps using Build Tools
+.....................................................................................
+
+Tool for creating and Managining vue app life cycles
+
+
+vue-cli
+ old pattern
+vite
+ modern pattern - recommended
+ npm init vue@latest
+
+This is abstraction for vite based project templates
+
+>npm init vue@latest
+Need to install the following packages:
+  create-vue@latest
+Ok to proceed? (y) y
+
+Vue.js - The Progressive JavaScript Framework
+
+√ Project name: ... vue-modern
+√ Add TypeScript? ... No / Yes
+√ Add JSX Support? ... No / Yes
+√ Add Vue Router for Single Page Application development? ... No / Yes
+√ Add Pinia for state management? ... No / Yes
+√ Add Vitest for Unit Testing? ... No / Yes
+√ Add Cypress for both Unit and End-to-End testing? ... No / Yes
+√ Add ESLint for code quality? ... No / Yes
+√ Add Prettier for code formatting? ... No / Yes
+
+Scaffolding project in E:\session\Toshiba\vue-session\vue-modern...
+
+Done. Now run:
+
+  cd vue-modern
+  npm install
+  npm run lint
+  npm run dev
+....................................................................................
+				Component Creational Pattern
+....................................................................................
+
+1.Plain Java script Pattern
+
+App.js
+export default {
+  
+  ...options 
+  
+}
+
+2.Single File Components -SFC
+
+ It is more declarative way of creating components
+ As name suggest, All Component logic inside single file.
+
+Component has three major sections
+
+1.template
+2.javascript
+3.style
+
+In SFC Pattern, we isloate very clearly into three sections
+
+<script>
+   ....All javascript code
+</script>
+<template>
+  ...template code
+</template>
+<style>
+ //style for this component
+</style>
+
+
+Plain javascript pattern is usefull where there is no build workflow,SFC is usefull and necessary in build tool work flow 
+
+SFC components are saved with fileName.vue
+....................................................................................
+                                SFC API styles
+...................................................................................
+
+				SFC Component
+	----------------------------------------------------------------
+        |                                                             |
+        |                                                             |
+
+      Options Api                                              Composition Api
+
+
+
+Commonality between both patterns
+
+1.code segementation is same
+  <script></script>
+  <template></template>
+  <style></style>
+
+
+Options Api Style Pattern:
+<!-- Options Api Pattern -->
+<script>
+//you have to return options object
+export default {
+
+}
+</script>
+<template>
+  <h1>Welcome to Vue App-Using SFC On Options Object Pattern</h1>
+</template>
+<style>
+</style>
+.....................................................................................
+Compostion Api Pattern:
+<!-- Compostion api Pattern  -->
+<script setup>
+ //java script code can go directly
+ 
+</script>
+<template>
+  <h1>Single File Component using Composition Api Pattern</h1>
+</template>
+<style>
+</style>
+....................................................................................
+				Component tree-Component Creational Pattern
+....................................................................................
+
+HTML View:
+
+<body>
+ <div id="root">
+    <div>
+	<h1>Welcome to Vue</h1>
+    </div>
+ </div>
+</body>
+
+
+Vue View
+<body>
+ <div id="root">
+    <App>
+	<Greeter></Greeter>
+    </App>
+ </div>
+</body>
+
+
+App.vue
+<script>
+import Greeter from "./components/Greeter.vue";
+export default {
+    components: { Greeter }
+}
+</script>
+<template>
+   <h1>Vue Application</h1>
+   <Greeter></Greeter>
+</template>
+
+Greeter.vue
+<script>
+</script>
+<template>
+    <h1>Greeter</h1>
+</template>
+
+Welcome.vue
+<script>
+</script>
+<template>
+    <h1>Welcome</h1>
+</template>
+
+.................................................................................
+			   Project layout
+
+In general Projects can be categorized into  2 sections
+
+1.feature based
+products
+customers
+inventory
+payment
+etc...
+2.framework based
+src/
+ components
+    ....
+Feature + framework
+ 
+ components
+    |
+    features
+
+components
+  |
+  products
+    products-list.vue
+    products-edit.vue
+    products-search.vue
+
+eg:
+
+<!-- Component Using options api pattern -->
+<script>
+import Greeter from './components/greeter/Greeter.vue';
+import Users from './components/users/Users.vue';
+//java script code will go inside literal object,which must be exported using export default
+export default {
+    components: { Greeter, Users }
+}
+</script>
+<template>
+  <div>
+     <Greeter></Greeter>
+     <Users></Users>
+  </div>
+</template>
+<style>
+</style>
+
+src/components/greeter/Greeter.vue
+
+<script>
+import Welcome from './Welcome.vue';
+import Hello from './Hello.vue';
+import Hai from './Hai.vue';
+
+export default {
+   components: { Welcome, Hello, Hai }
+}
+</script>
+<template>
+   <Welcome></Welcome>
+   <Hello></Hello>
+   <Hai></Hai>
+</template>
+<style>
+</style>
+
+src/components/users/User.vue
+<script>
+
+export default {
+}
+</script>
+<template>
+    <div>
+        <h2>Users Page</h2>
+    </div>
+</template>
+<style>
+</style>
+
+
+
+src/components/greeter/Welcome.vue
+<script>
+export default {
+
+}
+</script>
+<template>
+    <h1>Welcome to Vue!!!</h1>
+</template>
+<style>
+</style>
+
+
+
+src/components/greeter/Hello.vue
+<script>
+export default {
+
+}
+</script>
+<template>
+    <h1>Hello Vue!</h1>
+</template>
+<style>
+</style>
+
+src/components/greeter/Hai.vue
+<script>
+export default {
+   
+}
+</script>
+<template>
+    <h1>Hai Vue</h1>
+</template>
+<style>
+</style>
+.....................................................................................
+			   SFC - Composition API Pattern
+.....................................................................................
+
+In Compostion api pattern, there is a "hook(special function)" called "setup"
+
+In Compostion api all javascript code will go inside "setup"  function only
+
+
+				Compostion Api 
+				     |
+	--------------------------------------------------------------
+        |                                                            |
+     Imperative                                                 Declarative
+
+
+
+Imperative:
+ All code must go inside setup function
+
+<script>
+export default {
+
+   setup(){
+      //component code
+   }
+
+}
+</script>
+
+Declarative:
+
+<script setup>
+ //component
+</script>
+
+....
+
+Component Composition using Composition Api pattern using Imperative style
+
+<script>
+import User from "./components/users/User.vue";
+
+export default {
+  components: {
+    User
+  },
+  setup() {
+    //javascript code
+    return {   }
+  }
+}
+</script>
+<!-- <script setup>
+import User from "./components/users/User.vue";
+  //javascript code
+</script> -->
+<template>
+  <h1>Vue App using Composition Api</h1>
+  <User></User>
+</template>
+<style>
+</style>
+....................................................................................
+
+eg:
+
+src/components/App.vue
+
+<!-- <script>
+import User from "./components/users/User.vue";
+
+export default {
+  components: {
+    User
+  },
+  setup() {
+    //javascript code
+    return {   }
+  }
+}
+</script> -->
+<script setup>
+import User from "./components/users/User.vue";
+  //javascript code
+</script>
+<template>
+  <h1>Vue App using Composition Api</h1>
+  <User></User>
+</template>
+<style>
+</style>
+...
+src/components/Users.vue
+<script setup>
+</script>
+<template>
+    <h1>User Page</h1>
+</template>
+<style>
+</style>
+...................................................................................
+				Task
+
+Create Layout 
+1.header
+   |
+   Logo
+   SearchPanel
+   LoginPanel
+2.main
+   |
+   three sections
+    -Vue features
+3.Footer
+   |
+   Sponors
+   copyright
+
+You have to try
+
+1.Options api
+2.Compositions api with imperative and declarative Patterns
+............................&&&&&&&&&&..............................................
+
+
+
+
+
+
+
+
+
+
+
+
+
+				
