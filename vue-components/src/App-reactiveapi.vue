@@ -1,9 +1,9 @@
 <script setup>
-import { shallowReactive } from 'vue';
+import { reactive } from 'vue';
 
 
 //to make object reactive
-const comments = shallowReactive({
+const comments = reactive({
     like: 0,
     dislike: 0,
     recommend: {

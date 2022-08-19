@@ -1767,6 +1767,18 @@ v-once
 v-memo
 v-cloak
 
+..................................................................................
+			    v-html and v-text
+...................................................................................
+
+v-html :
+ inserts data into html element as "HTML"
+{{}} 
+  inserts data into html element as "Plain Text"
+
+				v-text
+
+Update the element's text content. - innerText
 
 <script setup>
 const name = 'Subramanian'
@@ -1869,6 +1881,598 @@ export default {
 
 if you want to change data, we need to interact with UI, we need event handling
 .................................&&&&&&&&&&&&.......................................
+			    Event Handling
+...................................................................................
+
+Event handling is one of the most popular concept in javascript as part of DOM programming.
+Event handling helps to interact with user.
+Events  are signals triggered by user or system, send to os system, the software or hardware reacts according to the event
+
+Events are classified into two category
+
+1.Hardware events
+   Triggered by user or system, interacts with hardware devices   
+eg:
+  Mouse events
+    onclick,ondblclick,onmouseenter...
+  https://www.w3schools.com/jsref/obj_mouseevent.asp
+  Keyboard events
+   onkeypress,onkeydown
+  https://www.w3schools.com/jsref/event_onkeypress.asp
+  Touch events
+  ontouchstart,ontouchend
+  https://www.w3schools.com/jsref/obj_touchevent.asp
+
+2.Application events
+   attached with objects called dom objects
+  onload,oncomplete
+...................................................................................
+				How event handling works
+
+Event handling has been designed based on the design pattern called "pub-sub"/observer design pattern.
+
+There are two actors:
+1.Producer
+   The producer is something who sends signals(events - name of the event and data assoicated) to the listener
+2.Listener
+  The Listener is someone who waits/listens for event.
+  Once the event is given who reacts/respond
+
+In js :
+ Listener is function.
+
+//event is just reference to the Event Object having information about event, and data
+function listener(event){
+     event.target.value
+}
+event object is a bridge between producer and listener
+
+In javascript , events are given by language itself.
+events are started with "on+eventName" - 
+ onclick="listener"
+ addEventListener('click',listener)
+listeners are plain js functions with event object reference arg
+
+Frameworks like vue,react,angular who adds their own abstractions.
+
+We can attach event on any dom element which could be application or hardware
+
+Vue event attachment:
+.....................
+ Vue attaches event with help of directive called "v-on"
+
+Syntax:
+ <element v-on:NameoftheEvent="listner"></element>
+ <button v-on:"doThis">Click</button>
+
+
+Simple event Handing with Options api pattern:
+..............................................
+<!-- Event listner in the options api -->
+<script>
+export default {
+    methods: {
+        //listener
+        hello(event) {
+            console.log(event)
+            console.log('Hello')
+            alert('Hello')
+        },
+        hai(event){
+            console.log('hai')
+        }
+    }
+}
+</script>
+<template>
+    <button v-on:click="hello">SayHello</button>
+    <button v-on:click="hai">SayHai</button>
+
+</template>
+
+Event listner in the compostion api with setup function
+........................................................
+<script>
+export default {
+    setup() {
+
+        //es 5 function style
+        // function hello(event) {
+        //     console.log('hello')
+        // }
+
+        // function hai(event) {
+        //     console.log('hai')
+        // }
+
+        //es 6 arrow functions
+        const hello = event => console.log('hello')
+        const hai = event => console.log('hai')
+
+        return {
+            //hello:hello, hai:hai
+            //es 6 destructured syntax
+            hello, hai
+        }
+    }
+}
+</script>
+<template>
+    <button v-on:click="hello">SayHello</button>
+    <button v-on:click="hai">SayHai</button>
+
+</template>
+.............................................................................
+
+Event listner in the compostion api with setup attribute
+<script setup>
+//es 6 arrow functions
+const hello = event => console.log('hello')
+const hai = event => console.log('hai')
+</script>
+<template>
+    <button v-on:click="hello">SayHello</button>
+    <button v-on:click="hai">SayHai</button>
+</template>
+
+Syntax: Short cut
+ <button @click="doThis">Click</button>
+....................................................................................
+		 How to attach more than one listener on single DOM Element
+...................................................................................
+
+<dom v-on:eventName="listener" v-on:eventName="listener">
+<dom v-on="{mouseenter:onMouseEnter,mouseleave:onMouseLeave}">
+
+<!-- Event listner in the compostion api with setup attribute -->
+<script setup>
+//es 6 arrow functions
+const onMouseLeave = event => console.log('exit')
+</script>
+<template>
+    <button v-on:click="hello">SayHello</button>
+    <button v-on:click="hai">SayHai</button>
+    <button @click="hai">SayHai</button>
+    <div>
+        <h1 v-on="{ mouseenter: onMouseEnter, mouseleave: onMouseLeave }">Book Now</h1>
+    </div>
+</template>
+..................................................................................
+			  How to pass data to the event listener
+..................................................................................
+const getData = (data,event) => {
+    console.log(data,event)
+}
+ <button @click="getData('hello',$event)">Pass Data</button>
+
+when we pass data to the listener, vue cant  pass event implicitly, we have to pass event object explicitly via "$event" which is glbal event object provided by vue.
+....................................................................................
+			       State
+
+Data upate,is called state mutation.
+
+State Mutation using options api pattern
+
+<script>
+export default {
+    data() {
+        return {
+            //state variable
+            count: 0 // inital state
+        }
+    },
+    methods: {
+        increment() {
+            //refer the state via this
+            this.count++ // state mutation
+        }
+    }
+}
+</script>
+<template>
+    <div>
+        <h1>Counter App</h1>
+        <h2>Value : {{ count }}</h2>
+        <button @click="increment">+</button>
+    </div>
+</template>
+<style>
+</style>
+.....................................................................................
+			
+
+State Mutation using compostion with setup  function 
+
+<script>
+export default {
+    setup() {
+        let count = 0
+        console.log('inital count', count)
+        const increment = event => {
+            count++
+            console.log('incremented count ', count)
+        }
+
+        return {
+            count, increment
+        }
+    }
+}
+</script>
+<template>
+    <div>
+        <h1>Counter App</h1>
+        <h2>Value : {{ count }}</h2>
+        <button @click="increment">+</button>
+    </div>
+</template>
+<style>
+</style>
+
+Here we are trying to mutate/update the "count" state variable, there is update happening but it does not trigger "view update"
+....................................................................................
+				Reactivity
+....................................................................................
+
+What is Reactivity?
+  Reactivity is one of the core vue js concept.
+Component state are reactive javascript objects.
+
+The word reactivity means "changing" the state(object),whenever changes happen it publishes some events, based on events,reactions happens.
+
+Programming work flow in general
+
+int x =10;
+int y =20;
+
+int result = x + y
+
+when you compute this code, the runtime will execute instructions top-down pattern.
+if there is change in variable (like x or y), will not update result variable
+ -Sequential programming model.
+
+What if i want to update the "result" variable value automatically when ever x or y changes.
+
+eg:
+Excel spreed sheet is one of the best eg for reactivitity programming
+
+eg;
+
+let A1=1
+let A2=2
+let A3 =A1+A2
+console.log(A3) => 3
+
+A2=4
+
+console.log(A3) 
+
+Here when you mutate A1 or A2, does not change automatically.
+
+
+We can wrap this code inside function
+
+ let A3
+ function update(){
+   A3 = A1 + A2
+ }
+
+in order get fresh value, we have to re-run the code that updates A3
+
+
+Pointers:
+
+1.There should be some update function, which produces a "side effect /effect".
+  if any function which changes the state of the program called side effect.
+
+2.Here ,A1 and A2 are considered dependencies of the side effect, because which helps makes side effects.
+  According to dependencies, this effect is said to be "subscriber"
+
+When ever "A1 and A2" changed, we need to invoke "update" function,which cause side effects.
+
+It looks like event driven programming (Pub-Sub Pattern /Observerable and Observer) 
+
+ function whenDepChange(update){
+     update()
+ }
+
+ let A3
+ function update(){
+   A3 = A1 + A2
+ }
+
+ whenDepChange(function(){
+     A3 = A1 + A2
+ })
+ whenDepChange(update)
+
+Role of whenDepchange function:
+................................
+
+1.Tracking the dependencies,
+    By evaulating the expression A1 and A2 ,Whether any one of them is read or not.
+
+Tracker--->triggers--whenDepChange--->runs update function---returns modified state
+
+
+Compostion Api pattern:
+
+ref()
+computed()
+reactive()
+readonly()
+watchEffect()
+watchPostEffect()
+watchSyncEffect()
+watch()
+
+How to implement simple reactivity ?
+
+<!-- State Mutation using compostion with setup  function  -->
+<script>
+import { ref } from 'vue'
+
+export default {
+    setup() {
+        //non reactivity state
+        //let count = 0
+        //reactivity state
+        let count = ref(0)
+        console.log('inital count', count)
+        const increment = event => {
+            count.value++
+            console.log('incremented count ', count.value)
+        }
+
+        return {
+            count, increment
+        }
+    }
+}
+</script>
+<template>
+    <div>
+        <h1>Counter App</h1>
+        <h2>Value : {{ count }}</h2>
+        <button @click="increment">+</button>
+    </div>
+</template>
+<style>
+</style>
+.....
+<!-- State Mutation using compostion with setup  attribute  -->
+<script setup>
+import { ref } from 'vue'
+//reactivity state
+let count = ref(0)
+console.log('inital count', count)
+const increment = event => {
+    count.value++
+}
+</script>
+<template>
+    <div>
+        <h1>Counter App</h1>
+        <h2>Value : {{ count }}</h2>
+        <button @click="increment">+</button>
+    </div>
+</template>
+<style>
+</style>
+.....................................................................................
+			Multiple Listeners and state mutation
+.....................................................................................
+
+<!-- State Mutation using compostion with setup  attribute  -->
+<script setup>
+import { ref } from 'vue'
+
+let count = ref(0)
+const increment = event => {
+    count.value++
+}
+const decrement = event => {
+    count.value--
+}
+</script>
+<template>
+    <div>
+        <h1>Counter App</h1>
+        <h2>Value : {{ count }}</h2>
+        <button @click="increment">+</button>
+        <button @click="decrement">-</button>
+
+    </div>
+</template>
+<style>
+</style>
+.....................................................................................
+			Multi Reactive State Variable
+
+<script setup>
+import { ref } from 'vue'
+
+const like = ref(0)
+const dislike = ref(0)
+
+const onlike = event => {
+    like.value++
+}
+const ondislike = event => {
+    dislike.value++
+}
+</script>
+<template>
+    <div>
+        <h1>Counter App</h1>
+        <h2>Likes : {{ like }} Dislikes : {{ dislike }}</h2>
+        <button @click="onlike">Like</button>
+        <button @click="ondislike">Dislike</button>
+    </div>
+</template>
+<style>
+</style>
+...................................................................................
+			How to declare reactive objects
+
+<script setup>
+import { reactive } from 'vue';
+
+
+//to make object reactive
+const comments = reactive({
+    like:0,
+    dislike:0
+})
+console.log(comments)
+
+const onlike = event => {
+    comments.like++
+}
+const ondislike = event => {
+    comments.dislike++
+}
+</script>
+<template>
+    <div>
+        <h1>Counter App</h1>
+        <h2>Likes : {{ comments.like }} Dislikes : {{ comments.dislike }}</h2>
+        <button @click="onlike">Like</button>
+        <button @click="ondislike">Dislike</button>
+    </div>
+</template>
+<style>
+</style>
+
+reactive():
+=>Reactive converstation(changes) are even updated for deep nested objects
+=>reactive api compares every property in the object before ui re renders for changes
+let obj={
+ 
+  a:1
+  b: {
+    c: {
+     d: {
+	e:0
+     }
+    }
+  }
+
+}
+
+.................................................................................
+                      Deep nested Object and reactive api
+..................................................................................
+
+<script setup>
+import { reactive } from 'vue';
+
+
+//to make object reactive
+const comments = reactive({
+    like: 0,
+    dislike: 0,
+    recommend: {
+        rating: {
+            value: 90
+        }
+    }
+})
+console.log(comments)
+
+const onlike = event => {
+    comments.like++
+}
+const rating = event => {
+    comments.recommend.rating.value++
+}
+</script>
+<template>
+    <div>
+        <h1>Counter App</h1>
+        <h2>Likes : {{ comments.like }} Dislikes : {{ comments.dislike }}
+            Rating : {{ comments.recommend.rating.value }}</h2>
+        <button @click="onlike">Like</button>
+        <button @click="ondislike">Dislike</button>
+        <button @click="rating">Rating</button>
+
+    </div>
+</template>
+<style>
+</style>
+
+..
+
+
+obj.a++
+here vue compares all nested object properties for changes before rerendering.
+To avoid unncessary comparsion, vue recommends another api called "shallowRef"
+
+
+shallowRef:
+
+Shallow version of reactive api
+There is no deep conversion
+
+
+const state = shallowReactive({
+  foo: 1,
+  nested: {
+    bar: 2
+  }
+})
+
+// mutating state's own properties is reactive
+state.foo++
+
+// ...but does not convert nested objects
+isReactive(state.nested) // false
+
+// NOT reactive
+state.nested.bar++
+
+eg:
+<script setup>
+import { shallowReactive } from 'vue';
+
+
+//to make object reactive
+const comments = shallowReactive({
+    like: 0,
+    dislike: 0,
+    recommend: {
+        rating: {
+            value: 90
+        }
+    }
+})
+console.log(comments)
+
+const onlike = event => {
+    comments.like++
+}
+const rating = event => {
+    comments.recommend.rating.value++
+}
+</script>
+<template>
+    <div>
+        <h1>Counter App</h1>
+        <h2>Likes : {{ comments.like }} Dislikes : {{ comments.dislike }}
+            Rating : {{ comments.recommend.rating.value }}</h2>
+        <button @click="onlike">Like</button>
+        <button @click="ondislike">Dislike</button>
+        <button @click="rating">Rating</button>
+
+    </div>
+</template>
+<style>
+</style>
+
+
+
+
+
 
 
 
