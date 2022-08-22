@@ -2468,17 +2468,844 @@ const rating = event => {
 </template>
 <style>
 </style>
+....................................................................................
+			List rendering-Arrays
+....................................................................................
+
+
+Arrays:
+=>Arrays are basic datastructure which is used to render collection of data.
+=>Arrays are dynamic 
+
+Arrays and UI
+ if you want to render more data , then array is used..
+Arrays can help to build in UI layouts in various ways
+
+Layouts:
+
+1.List View
+  <ul><li></li></ul>
+
+2.Card View layout
+   <div> <header>....
+
+3.Grid View layout
+   <table>
+
+
+v-for directive:
+ this directive used for array rendering / object rendering.
+
+<div v-for="item in items">
+  {{ item.text }}
+</div>
+
+<div v-for="(item, index) in items"></div>
+<div v-for="(value, key) in object"></div>
+<div v-for="(value, name, index) in object"></div>
+
+
+List Rendering:
+<script setup>
+import { reactive } from 'vue';
+import TODOS from './mock-data/todos-mock'
+
+const todos = reactive(TODOS)
+
+
+</script>
+<template>
+<div>
+    <h1>Todo List</h1>
+    <ul>
+        <li v-for="todo in todos">
+            <span>{{todo.title}}</span>
+        </li>
+    </ul>
+</div>
+
+</template>
+<style>
+</style>
+...................................................................................
+			List with Index
+...................................................................................
+<script setup>
+import { reactive } from 'vue';
+import TODOS from './mock-data/todos-mock'
+
+const todos = reactive(TODOS)
+
+
+</script>
+<template>
+<div>
+    <h1>Todo List</h1>
+    <ul>
+        <li v-for="(todo,index) in todos">
+            <span>{{index}} {{todo.title}}</span>
+        </li>
+    </ul>
+</div>
+
+</template>
+<style>
+</style>
+
+.................................................................................
+				key
+
+if there is reordering in the list when we do some changes like sorting,filtering
+vue uses an algorthim called patch..
+We can tell to that algorthim how we can re arrange. thats where key attribute comes into picture.
+key value must be unquie
+
+<script setup>
+import { reactive } from 'vue';
+import TODOS from './mock-data/todos-mock'
+
+const todos = reactive(TODOS)
+
+
+</script>
+<template>
+    <div>
+        <h1>Todo List</h1>
+        <ul>
+            <li v-for="(todo, index) in todos" :key="todo.id">
+                <span>{{ index }} {{ todo.title }}</span>
+            </li>
+        </ul>
+    </div>
+
+</template>
+<style>
+</style>
+....................................................................................
+				Nested List
+
+outter array is iterated with "item in array"
+inner array/nested array is iterated with "nesteditem of nestedarray"
+
+<script setup>
+import { reactive } from 'vue';
+
+const persons = [
+    {
+        id: 1,
+        name: 'A',
+        friends: [
+            {
+                name: 'F1'
+            },
+            {
+                name: 'F2'
+            },
+            {
+                name: 'F3'
+            }
+        ]
+    },
+    {
+        id: 2,
+        name: 'A1',
+        friends: [
+            {
+                name: 'B1'
+            },
+            {
+                name: 'B2'
+            },
+            {
+                name: 'B3'
+            }
+        ]
+    },
+    {
+        id: 3,
+        name: 'A2',
+        friends: [
+            {
+                name: 'C1'
+            },
+            {
+                name: 'C2'
+            },
+            {
+                name: 'C3'
+            }
+        ]
+    }
+]
+const list = reactive(persons)
+</script>
+<template>
+    <ul>
+        <li v-for="person in list">
+            <span>{{ person.id }} {{ person.name }}</span>
+            <ul>
+                <li v-for="friend of person.friends">
+                    <span>{{ friend.name }}</span>
+                </li>
+            </ul>
+        </li>
+    </ul>
+
+
+</template>
+....................................................................................
+			 How to iterate Object using v-for
+....................................................................................
+<script setup>
+import { reactive } from 'vue';
+
+const movie = reactive({
+    title: 'The Matrix',
+    langague: ['English', 'Spanish', 'Hindi', 'Tamil', 'Telgu'],
+    hours: '2 hrs 5 mins'
+})
+
+</script>
+<template>
+    <ul>
+        <li v-for="tmpMovie in movie">
+            <span>{{tmpMovie}}</span>
+        </li>
+    </ul>
+
+</template>
+.....................................................................................
+		 Range - If you want to repeat something n of times
+....................................................................................
+Range 
+ initalvalue in endvalue
+
+<script setup>
+import { ref } from 'vue';
+
+const start = ref(1)
+</script>
+<template>
+    <ul>
+        <li v-for="start in 100">
+            <span>{{ start }}</span>
+        </li>
+    </ul>
+
+</template>
+
+..................................................................................
+			Template and v-for
+.................................................................................
+<script setup>
+import { reactive } from 'vue';
+import todos from './mock-data/todos';
+
+const TODOS = reactive(todos)
+</script>
+<template>
+    <template v-for=" todo in todos">
+        <h1>Todo Id {{ todo.id }}</h1>
+        <p>Status {{ todo.completed ? 'Completed' : 'Not Completed' }}</p>
+    </template>
+
+</template>
+
+.....................................................................................
+			 Array Mutations
+.....................................................................................
+<script setup>
+import { reactive } from 'vue';
+
+const todos = reactive([])
+
+const addItem = () => {
+    //array mutation - add element into array
+    todos.push({
+        id: Math.random(),
+        text: 'do this '
+    })
+}
+</script>
+<template>
+    <ul>
+        <li v-for="todo in todos">
+            {{ todo }}
+        </li>
+    </ul>
+    <button @click="addItem">Add New Item</button>
+</template>
+
+In Array all apis will not trigger render cycle.
+
+Apis which trigger render cycle; -Mutating apis
+
+1.push
+2.pop
+3.shift
+4.unshift
+5.splice
+6.sort
+7.reverse
+
+
+.....................................................................................
+			Filtering/sorting arrays with Immutable api
+
+
+Some times we want to display filtered or sorted data from the array without mutating or reseting the original data
+
+
+<!-- Array immutable api  -->
+
+
+<script setup>
+import { ref } from 'vue';
+import TODOS from './mock-data/todos-mock';
+
+const todos = ref(TODOS)
+
+//immutable logic : filter,map,reduce, you can use even spread operator/object.assign
+const filter = () => todos.value = todos.value.filter(todo => todo.completed)
+
+</script>
+<template>
+    <button @click="filter">filter</button>
+    <h1>Total Items : {{todos.length}}</h1>
+    <ul>
+        <li v-for="todo in todos">
+            {{ todo }}
+        </li>
+    </ul>
+
+</template>
+....................................................................................
+			 Object Destructruing 
+
+<script setup>
+
+//without object destrucing
+// function display(employee) {
+//     console.log(`Id ${employee.id}`)
+//     console.log(`Name ${employee.name}`)
+//     console.log(`City ${employee.address.city}`)
+// }
+//with object destructruing
+//Destructrue means extracting object properties from the object
+function display(employee) {
+    const { id, name, address: { city } } = employee
+    console.log(`Id ${id}`)
+    console.log(`Name ${name}`)
+    console.log(`City ${city}`)
+}
+display({
+    id: 1,
+    name: 'subramanian',
+    address: {
+        city: 'Coimbatore'
+    }
+})
+
+</script>
+<template>
+
+</template>
+.....................................................................................
+			Reactivity and Object Destructuring
+....................................................................................
+<script setup>
+import { reactive } from 'vue';
+
+// const employee = reactive({
+//     id: 1,
+//     name: 'subramanian',
+//     address: {
+//         city: 'Coimbatore'
+//     }
+// })
+const { id, name, address: { city } } = reactive({
+    id: 1,
+    name: 'subramanian',
+    address: {
+        city: 'Coimbatore'
+    }
+})
+</script>
+<template>
+    <div>
+        <p>Id : {{ id }}</p>
+        <p>Name : {{ name }}</p>
+        <p>City : {{ city }}</p>
+
+
+    </div>
+</template>
+....................................................................................
+		  Reactivity ,state Mutation and Object Destructuring
+...................................................................................
+
+After reactive object destructuring, can we state mutation?
+
+here reactive will not trigger for after destructure
+
+How to convert destructured properties into reactive?
+
+1.toRef
+   single property conversion
+
+const state = reactive({
+  foo: 1,
+  bar: 2
+})
+
+const fooRef = toRef(state, 'foo')
+
+2.toRefs
+ multi property conversion
+
+const state = reactive({
+  foo: 1,
+  bar: 2
+})
+
+const stateAsRefs = toRefs(state)
 
 
 
+<!-- State mutation after object destructuring -->
+
+<script setup>
+import { reactive,toRefs } from 'vue';
+
+// const location = reactive({
+//     lat: 10.5,
+//     lng: 90.5
+// })
+
+// const location = reactive({
+//     lat: 10.5,
+//     lng: 90.5
+// })
+// let { lat, lng } = toRefs(location)
+let { lat, lng }  = toRefs(reactive({
+    lat: 10.5,
+    lng: 90.5
+}))
+
+const updateLocation = () => {
+    // location.lat = 22.78
+    lat.value = 22.78
+}
+</script>
+<template>
+    <div>
+        <!--  <p>Lat {{ location.lat }}</p>
+        <p>Lng {{ location.lng }}</p> -->
+        <p>Lat {{ lat }}</p>
+        <p>Lng {{ lng }}</p>
+        <button @click="updateLocation">Update Location</button>
+    </div>
+</template>
+<style>
+</style>
+...................................................................................
+			  Computed Properties
+...................................................................................
+Here we have written "conditional expression inside template", which is not recommended 
+
+=>The code is not declarative (dont write any js logic)
+=>The code is not maintainable , later if you want to change any display message.
+
+We have to isloate the template expression logic into a separate method called as 
+"computed property"
+
+Computed property is written using "computed" api.
+<script setup>
+// import { computed } from '@vue/reactivity';
+import { reactive, computed } from 'vue';
+
+const product = reactive({
+    id: 1,
+    name: 'Books',
+    items: [
+        //'Java', 'Javascript', 'Angular', 'Vue', 'React'
+    ]
+})
+
+const stockInfo = computed(() => {
+    return product.items.length > 0 ? "InStock" : "OutofStock"
+})
 
 
+</script>
+<template>
+    <p>Product Id : {{ product.id }}</p>
+    <p>Product Name : {{ product.name }}</p>
+    <!-- <p>Product Status : {{ product.items.length > 0 ? "InStock" : "OutofStock"}}</p> -->
+    <p>Product Status : {{ stockInfo }}</p>
+</template>
+...................................................................................
+		    State Mutation and Computed Property
+...................................................................................
+
+When you do state mutation, computed property method gets called automatically and returns the latest data always
+
+<script setup>
+import { computed, reactive } from 'vue';
+
+const products = reactive({
+    id: 1,
+    name: 'books',
+    items: [
+        "Vue in Action",
+        "Vue Master Class"
+    ]
+})
+
+//state mutation 
+const update = () => products.items.push("Exploring Vue 3")
+
+const totalStock = computed(() => {
+    return products.items.length;
+})
+
+</script>
+<template>
+    <div>
+        <p>Id : {{ products.id }} </p>
+        <p>Name : {{ products.name }} </p>
+        <!-- <p>Total Item : {{ products.items.length }} </p> -->
+        <p>Total Item : {{ totalStock }} </p>
+
+        <button @click="update">Add Item</button>
+    </div>
+</template>
+<style>
+</style>
+....................................................................................
+			 Template logic with computed property method 
+				and regular javascript Method
+....................................................................................
+
+computed vs regular methods:
+............................
+
+computed is cached where regular methods is not cached.
+
+computed is lazy , that means when ever the property is changed which is represented
+inside computed method
+
+computed method is called only reactive dependency.
+
+computed method is always "getter method"
+
+<script setup>
+import { computed, reactive } from 'vue';
+
+const products = reactive({
+    id: 1,
+    name: 'books',
+    items: [
+        "Vue in Action",
+        "Vue Master Class"
+    ]
+})
+
+//state mutation 
+const update = () => products.items.push("Exploring Vue 3")
+
+//computed method
+const totalStock = computed(() => {
+    console.log('computed is called')
+    return products.items.length;
+    //return 100
+})
+
+//regular/normal method
+const totalStockMethod = () => {
+    console.log('regular method is called')
+    return products.items.length;
+}
 
 
+</script>
+<template>
+    <div>
+        <p>Id : {{ products.id }} </p>
+        <p>Name : {{ products.name }} </p>
+        <!-- <p>Total Item : {{ products.items.length }} </p> -->
+        <p>Total Items withComputed Property : {{ totalStock }} </p>
+        <p>Total Item with Regular Method: {{ totalStockMethod() }} </p>
+
+        <button @click="update">Add Item</button>
+    </div>
+</template>
+<style>
+</style>
+.....................................................................................
+			 Computed property method writable Computed
+
+Computed properties are by default "getter-only", if you try change a new value to a computed a property, you will get runtime warning.
+
+In case if you want to write writable computed property. you have to provide explicit getters and setters.
+<script setup>
+import { computed, ref } from 'vue';
+
+const firstName = ref('Subramanian')
+const lastName = ref('Murugan')
+
+//computeed property to create fullName
+const fullName = computed({
+    //get
+    get() {
+        return `${firstName.value} ${lastName.value}`
+    },
+    //set
+    set(newValue) {
+        //we have to use destructuring syntax
+        [firstName.value, lastName.value] = newValue.split(' ')
+    }
+})
+
+</script>
+<template>
+    <h1>Full Name {{ fullName }}</h1>
+</template>
+<style>
+</style>
+....................................................................................
+			 Best pratices for computed Properties
+....................................................................................
+
+1.Getters should side effect free.
+2.Dont do any state mutation inside getters of computed.
+3.It should always computes and return values only.
+.....................................................................................
+			  Watchers
+....................................................................................
 
 
+Computed properties allow us to declaratively compute derived values. However, there are cases where we need to perform "side effects" in reaction to state changes - for example, mutating the DOM, or changing another piece of state based on the result of an async operation
+
+// watching single source
+function watch<T>(
+  source: WatchSource<T>,
+  callback: WatchCallback<T>,
+  options?: WatchOptions
+): StopHandle
+
+// watching multiple sources
+function watch<T>(
+  sources: WatchSource<T>[],
+  callback: WatchCallback<T[]>,
+  options?: WatchOptions
+): StopHandle
+
+watch with simple 
+
+<!-- Watchers : Special function which watches the state mutation and do some side effects -->
+<script setup>
+import { ref, watch } from 'vue'
+const x = ref(0)
+
+watch(x, (newX) => {
+    console.log(` X value is ${newX}`)
+})
+
+</script>
+<template>
+    <h1>Watchers</h1>
+    <button @click="x++">+</button>
+</template>
 
 
+Watch multiple properties
+..........................
+
+<script setup>
+import { ref, watch } from 'vue'
+const x = ref(0)
+const y = ref(0)
+const z = ref(0)
+
+watch([x, y, z], ([newX, newY, newZ]) => {
+    console.log(` X value is ${newX}`)
+    console.log(` Y value is ${newY}`)
+    console.log(` Z value is ${newZ}`)
+
+})
+
+</script>
+<template>
+    <h1>Watchers</h1>
+    <button @click="x++">X</button>
+    <button @click="y++">Y</button>
+    <button @click="z++">Z</button>
+
+</template>
+....................................................................................
+		How to watch literal object properties
+	
+
+Pass getter function which returns object property to be watched
+const getterFun=object.property	
+watch(getterFun,watcherFunc)
+
+<script setup>
+import { reactive, ref, watch } from 'vue';
+
+const counter = reactive({
+    up: 0,
+    down: 100
+})
+const increment = () => counter.up++
+const decrement = () => counter.down--
+
+
+//watch object particular property
+watch(() => counter.up, count => {
+    console.log(`Counter Inside Watch ${count}`)
+    if (count > 10) {
+        alert(' Volum is High')
+    }
+})
+
+</script>
+<template>
+    <h1>Up : {{ counter.up }}</h1>
+    <button @click="increment">+</button>
+    <h1>Down : {{ counter.down }}</h1>
+    <button @click="decrement">-</button>
+</template>
+
+...................................................................................
+				Deep watching
+..................................................................................
+if you watch the whole reactive object , it will create a deep watcher, the callback will triggered if any property the object changes
+
+
+<script setup>
+import { reactive, ref, watch } from 'vue';
+
+const counter = reactive({
+    up: 0,
+    down: 100
+})
+const x = ref(0);
+
+const increment = () => counter.up++
+const decrement = () => counter.down--
+
+
+//watch  whole reactive object
+//1st param is reactive object to be watched
+//2nd param is reactive to be returned
+//3rd param is only if there is different object
+watch(counter, () => {
+    console.log('watching...')
+    return counter
+}, (newValue, OldValue) => {
+    //immutable 
+    console.log(newValue, OldValue)
+    return counter
+}, { deep: true })
+
+
+</script>
+<template>
+    <h1>Up : {{ counter.up }}</h1>
+    <button @click="increment">+</button>
+    <h1>Down : {{ counter.down }}</h1>
+    <button @click="decrement">-</button>
+
+    <button @click="x++">{{ x }}</button>
+
+</template>
+...................................................................................
+			 watchEffect
+.....................................................................................
+
+watch is lazy, means called only if given state changes, watchEffect is executed atleast onece, and reexecuted whenever the property changes.
+<script setup>
+import { ref, watch, watchEffect } from 'vue'
+
+// bind ref as a variable
+let count = ref(0)
+
+// watch(count, () => {
+//     console.log(count.value)
+// })
+watchEffect(() => {
+    //inital ajax logic
+    console.log(count.value)
+})
+
+</script>
+<template>
+    <p>{{ count }}</p>
+    <button @click="count++">+</button>
+</template>
+..................................................................................
+			  watch vs watchEffect
+
+1.watch only tracks the explicitly watched sources. it wont track anything accessed inside the callback function. callback function called only if there is state mutation
+
+2.watchEffect , on the other hand, coimbines dedependcy tracking and side effect into onephase.called eargly without any state mutate starts.
+....................................................................................
+		          conditional Rendering
+....................................................................................
+
+
+v-if and v-else:
+................
+
+<script setup>
+import { computed, ref } from 'vue'
+
+const name = ref('admin')
+
+const isAdmin = computed(() => name.value === 'admin')
+
+</script>
+<template>
+    <div>
+        <!-- <h1 v-if="name === 'admin'">You are Admin</h1>
+        <h1 v-else>You are guest</h1> -->
+        <h1 v-if="isAdmin">You are Admin</h1>
+        <h1 v-else>You are guest</h1>
+    </div>
+</template>
+
+v-if takes boolean expression or truthy or falsy value, if it is true that block will be executed else, v-else block will be executed
+v-if and v-else should be in the same place.
+
+....................................................................................
+			v-if,v-else-if,else
+<!-- if, else..if with template -->
+
+<script setup>
+import { ref } from 'vue';
+const response = ref('ok')
+
+
+</script>
+<template>
+    <template v-if="response === 'ok'">
+        <h1>OK Title</h1>
+        <p>OK Paragraph 1</p>
+        <p>OK Paragraph 2</p>
+    </template>
+    <template v-else-if="response === 'something'">
+        <h1>Something Title</h1>
+        <p>Something Paragraph 1</p>
+        <p>Something Paragraph 2</p>
+    </template>
+    <template v-else>
+        <h1>else Title</h1>
+        <p>else Paragraph 1</p>
+        <p>else Paragraph 2</p>
+    </template>
+</template>
 
 
 				
