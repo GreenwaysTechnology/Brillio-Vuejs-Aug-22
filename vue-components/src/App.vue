@@ -1,36 +1,11 @@
 <script setup>
-import { shallowReactive } from 'vue';
-
-
-//to make object reactive
-const comments = shallowReactive({
-    like: 0,
-    dislike: 0,
-    recommend: {
-        rating: {
-            value: 90
-        }
-    }
-})
-console.log(comments)
-
-const onlike = event => {
-    comments.like++
-}
-const rating = event => {
-    comments.recommend.rating.value++
-}
+import ScopeSlot from './components/ScopeSlot.vue'
 </script>
 <template>
-    <div>
-        <h1>Counter App</h1>
-        <h2>Likes : {{ comments.like }} Dislikes : {{ comments.dislike }}
-            Rating : {{ comments.recommend.rating.value }}</h2>
-        <button @click="onlike">Like</button>
-        <button @click="ondislike">Dislike</button>
-        <button @click="rating">Rating</button>
-
-    </div>
+    <h1>Vue Application</h1>
+    <hr />
+    <!--Scoped Slots : Sending data from the child to Parent  -->
+    <ScopeSlot v-slot="slotProps">
+        {{ slotProps.message }}
+    </ScopeSlot>
 </template>
-<style>
-</style>
