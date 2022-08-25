@@ -8,7 +8,7 @@ function sayHai() {
 }
 </script>
 <template>
-    <h1>{{ message }} {{ name }}</h1>
+    <h1 class="header">{{ message }} {{ name }}</h1>
     <h1>{{sayHai()}}</h1>
 </template>
 <style>

@@ -5576,15 +5576,949 @@ Use Plugin functionality inside app
 <template>
   <h1>{{$uppercase('hello,how are you')}}</h1>
 </template>
+.....................................................................................
+			Life cycle hooks
+....................................................................................
+
+Each vue component instance goes through a series of initalization steps when its created.
+Common tasks:
+1.It needs to setup data observation
+2.Compile the template
+3.mount the instance to the dom
+4.update the dom when data chanages
+
+
+All life cycles hooks begin with "on+LifeCycle" 
+All life cycle method takes parameter which is "callback" function
+
+onMounted(function(){})
+
+Commonly used life cycles
+
+onMounted 
+onUpdated
+onUnMounted
+
+onMounted:
+  It is called after component been inserted into dom.
+
+Use of this lifecycle:
+1.Performing side effects
+   like : ajax calls,timers,websocket calls....
+          dom mutation.
+
+
+   
+<script setup>
+import { onBeforeMount, onBeforeUnmount, onBeforeUpdate, onMounted, onUnmounted, onUpdated, ref } from 'vue';
+
+const count = ref(10)
+
+const update = () => {
+    count.value++
+}
+
+//Mount and Unmount
+onBeforeMount(() => {
+    console.log('Before Mount')
+})
+onMounted(() => {
+    console.log('on Mounted')
+    //timer : async task
+    setTimeout(() => {
+        count.value++
+    }, 5000)
+    //inital ajax calls
+
+    //inital websocket calls
+    
+})
+onUnmounted(() => {
+    console.log('on Un Mounted')
+})
+onBeforeUnmount(() => {
+    console.log('Before UnMount')
+})
+
+//update cycle
+onBeforeUpdate(() => {
+    console.log('Before Update')
+})
+onUpdated(() => {
+    console.log('After Update')
+})
+
+</script>
+<template>
+    <h1>Life Cycle hooks {{ count }}</h1>
+    <button @click="update">Update</button>
+</template>
+.....................................................................................
+				CSS integration
+..................................................................................
+
+Vue integrates css globally and also component specific.
+
+Globall css :
+ main.js
+
+
+Component specific css:
+
+<script setup>
+</script>
+<template>
+    <div>
+        <h1 class="header">Hello</h1>
+    </div>
+</template>
+<style>
+.header {
+    color: blue;
+}
+</style>
+
+...
+scoped:
+<script setup>
+</script>
+<template>
+    <div>
+        <h1 class="header">Hello</h1>
+    </div>
+</template>
+<style scoped>
+.header {
+    color: blue;
+}
+</style>
+
+with scoped
+<style scoped>
+h1 {
+    color: blue
+}
+</style>
+
+output:
+<h1 data-v-1c354f03="">7 - Details</h1>
+
+with out scoped
+<style>
+h1 {
+    color: blue
+}
+</style>
+<h1>7 - Details</h1>
+
+The scoped attribute is very useful , this attaches a unique HTML 5 data attribute
+selector to all of your styles, preventing them from colliding globally.
+
+scoped attribute it apply to css only to the current component.
+This is similar to the style encasulation found the Shadow DOM.
+.....................................................................................
+
+Child components and scoped attribute:
+.....................................
+With scoped, the parent component styles will not lead into the child components.
+.....................................................................................
+			 Dynamic styles: class and style binding
+.....................................................................................
+
+<div :class="{active:isActive}">
+
+here active class is added when isActive variable is true
+
+<script setup>
+import { onMounted, reactive, ref } from 'vue';
+
+const isActive = ref(true)
+const sytleobj = reactive({ active: isActive, text: isActive })
+
+const toggle = () => {
+    isActive.value = !isActive.value
+    console.log(isActive.value)
+}
+</script>
+<template>
+    <!-- <div @click="toggle" :class="{ active: isActive ,text:isActive }">
+        <h1>Hello</h1>
+    </div> -->
+    <div @click="toggle" :class="sytleobj">
+        <h1>Hello</h1>
+    </div>
+</template>
+<style scoped>
+.active {
+    background-color: aqua;
+}
+
+.text {
+    font-size: small
+}
+</style>
+
+
+inline styles:
+..............
+
+<script setup>
+import { onMounted, reactive, ref } from 'vue';
+const sytleobj = reactive({ active: isActive, text: isActive })
+
+//inline style
+const activecolor = ref('red')
+const fontSize = ref(30)
+
+
+const update = () => {
+    activecolor.value = 'yellow'
+    fontSize.value = 50
+}
+</script>
+<template>
+    <div :style="{ color: activecolor, fontSize: fontSize + 'px' }">
+        <h1>Hai</h1>
+    </div>
+    <button @click="update">Update Style </button>
+</template>
+<style scoped>
+.active {
+    background-color: aqua;
+}
+
+.text {
+    font-size: small
+}
+</style>
 
 
 
+.....................................................................................
+			  Template Ref
+....................................................................................
+
+How to access dom element in Angular?
+ Inside component : event object
+ Inside Template  : template reference variable "#"
+ Inside directive : HostElement Object
+
+How to access dom element in React?
+ Inside component : event object
+ Inside jsx : ref keyword - 
+
+
+How to access dom element in Vue?
+ Inside component : event object
+ Inside Template  : ref keyword.
+
+syntax:
+ <input ref="variable">
+
+ref is attribute is used to access dom element or child component instance after it is mounted.
+
+ref ,can be used inside "onMounted" life cycle api.
+
+Use cases:
+1.in order to access dom elements directly
+2.in order to integrate third party libs.
+
+<script setup>
+import { onMounted, ref } from 'vue';
+import Greeter from './components/Greeter.vue';
+
+const myinput = ref(null)
+const greeter = ref(null)
+
+onMounted(() => {
+    console.log(myinput)
+    myinput.value.focus()
+    console.log(greeter.value)
+})
+</script>
+<template>
+    <input ref="myinput" value="test" />
+    <Greeter ref="greeter" />
+</template>
+.....................................................................................
+				Async components
+.....................................................................................
+ 
+Components are loaded sync in general.
+
+When you build app, app is collection of components, components are packed as js file.
+i want to separate the components into smallar and smallar bundles, and those bundles are loaded onfly , on demand.
+
+Async components are loaded as a separate bundle, on demand.
+
+There is a funnction called 
+
+defineAsyncComponent(function(){
+    return Promise((resolve,reject)=>{
+	resolve(loadcomponent)
+    })
+})
+
+defineAsyncComponent(function(){
+    import('./components/MyComponent.vue")
+})
+
+eg;
+<script setup>
+import { defineAsyncComponent } from 'vue';
+import Greeter from './components/Greeter.vue';
+
+//load component
+const GreeterAsync = defineAsyncComponent(() => import('./components/Greeter.vue'))
+</script>
+<template>
+    <GreeterAsync/>
+</template>
+<style>
+</style>
+
+What if the component is not loaded? 
+
+Due to some errors , the component is not loaded how to handle such errors.
+
+<script setup>
+import { defineAsyncComponent } from 'vue';
+import Greeter from './components/Greeter.vue';
+import ErrorComponent from './components/ErrorComponent.vue'
+
+//load component
+// const GreeterAsync = defineAsyncComponent(() => import('./components/Greeter.vue'))
+const GreeterAsync = defineAsyncComponent({
+    loader: () => import('./components/Greeter.vue'),
+    loadingComponent: Greeter,
+    errorComponent: ErrorComponent,
+    delay: 5000,
+    timeout: 10000
+})
+</script>
+<template>
+    <GreeterAsync />
+</template>
+<style>
+</style>
+
+....................................................................................
+			How to simulate the component delay loading
+
+....................................................................................
+			Async Components With Suspense
+.................................................................................
+
+Async components are not loaded up front, rather which is loaded as chunk(small bundle), when ever it is necessary.
+
+const component = defineAsyncComponent(()=>{
+   import('./components/MyComponent.vue')
+})
+
+<script setup>
+import { defineAsyncComponent } from 'vue';
+
+const HelloWorld = defineAsyncComponent(() => import('./components/HelloWorld.vue'))
+
+</script>
+<template>
+    <HelloWorld />
+</template>
+
+.........................
+
+HelloWorld.vue
+<script setup>
+defineProps({
+  msg: {
+    type: String,
+    required: true
+  }
+})
+function delay() {
+  return new Promise((resolve, rejec) => {
+    setTimeout(resolve, 10000, 'I delay the process')
+  })
+}
+const output = await delay()
+
+</script>
+
+<template>
+  <div class="greetings">
+    <h1 class="green">{{ msg }} {{output}}</h1>
+    <h3>
+      You’ve successfully created a project with
+      <a target="_blank" href="https://vitejs.dev/">Vite</a> +
+      <a target="_blank" href="https://vuejs.org/">Vue 3</a>.
+    </h3>
+  </div>
+</template>
+
+<style scoped>
+h1 {
+  font-weight: 500;
+  font-size: 2.6rem;
+  top: -10px;
+}
+
+h3 {
+  font-size: 1.2rem;
+}
+
+.greetings h1,
+.greetings h3 {
+  text-align: center;
+}
+
+@media (min-width: 1024px) {
+
+  .greetings h1,
+  .greetings h3 {
+    text-align: left;
+  }
+}
+</style>
+...
+
+<script setup>
+import { defineAsyncComponent, Suspense } from 'vue';
+
+const HelloWorld = defineAsyncComponent(() => import('./components/HelloWorld.vue'))
+
+const message = 'Hello Async component'
+</script>
+<template>
+    <Suspense>
+        <HelloWorld :msg="message" />
+        <!-- This is fallback component when component takes more time to load -->
+        <template #fallback>
+            <h1>Loading...</h1>
+        </template>
+    </Suspense>
+</template>
+...................................................................................
+.....................................................................................
+			   Animations
+.....................................................................................
+
+vue Provides two implmentation for animation
+
+1.Transition -  Built in component
+2.TransitionGroup - Built in component 
+
+For Animations
+
+Stages:
+
+1.if user enters / leaves into the screen.
+
+In General animtations are implemented behind the scene using "CSS 3 advanced classes"
+
+Vue offers built in css based component for implementing basic animation features.
+
+<script setup>
+import { ref } from 'vue';
+
+const show = ref(true)
+
+</script>
+<template>
+    <button @click="show = !show">Toggle</button>
+    <Transition name="fade">
+        <p v-if="show">
+            Hey , How are you?
+        </p>
+    </Transition>
+</template>
+<style>
+/* Transition styles */
+.v-enter-active,
+.v-leave-active {
+    transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+    opacity: 0;
+}
+</style>
+
+...................
+
+<script setup>
+import { ref } from 'vue'
+const show = ref(true)
+</script>
+
+<template>
+	<button @click="show = !show">Toggle</button>
+  <Transition name="slide-fade">
+    <p v-if="show">hello</p>
+  </Transition>
+</template>
+
+<style>
+.slide-fade-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.slide-fade-leave-active {
+  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateX(20px);
+  opacity: 0;
+}
+</style>
+.....................................................................................
+			 SPA
+...................................................................................
+
+...................................................................................
+			How to build SPA :Routing
+....................................................................................
+
+SPA is type of web application built for browsers, all navagations are done by javascript  , html only.
+
+SPA is called client routing.
+
+SPA core features:
+
+1.all navagation is controlled inside browser only
+2.From the server we get only data via apis as json format
+3.In spa, only we have one physical page called landing page /home page
+4.Name of the landing page would be "index.html"
+5.Rest of application page are called "virtual pages" which are created by js  dynamically we call "components"
+6.navigation is controlled by javascript objects called "location and histroy objects"
+7.Frameworks for routing is built on the top of these objects only.
+8.in order to build routing we need "HTML 5" 
+
+
+Routing can be implemented using plain js,html5,ajax,css3 itself, but in large scale we need framework, Vue supports official "vue router" which is supplied as "plugin"
 
 
 
+Router implementation without Router lib:
+
+<script setup>
+import HelloWorld from './components/HelloWorld.vue';
+import Home from './components/Home.vue'
+import { ref, computed } from 'vue'
+//route config
+const routes = {
+  '/': Home,
+  '/hello': HelloWorld
+}
+//Access path
+const currentPath = ref(window.location.hash)
+
+//track path changes
+window.addEventListener('hashchange', () => {
+  currentPath.value = window.location.hash
+})
+//current view
+const currentView = computed(() => {
+  return routes[currentPath.value.slice(1) || '/']
+})
+
+</script>
+<template>
+  <!-- Navigation links -->
+  <div>
+    <ul>
+      <li>
+        <a href="#/">Home</a>
+      </li>
+      <li>
+        <a href="#/hello">Hello</a>
+      </li>
+    </ul>
+    <component :is="currentView" />
+  </div>
+</template>
 
 
+http://localhost:3000/#/
 
+
+Vue offers official vue router lib, using that lib how to build spa application?
+
+
+There are two ways to add router to vue app
+
+For existing vue app
+npm install vue-router@4
+
+for app which begins new project
+
+Web Application url pattern:
+
+1.static url
+ http://www.example.com/products.html / products.pdf
+2.dynamic web url
+ http://www.example.com/products.do /products.jsp | products.aspx | products.php
+3.Web service url - REST Api
+ http://www.example.com/api/products =>json
+4.SPA Web url
+
+
+SPA URL Patterns:
+................
+1.web url - looks like web service url
+   http://www.example.com/hello /products
+2.hash url pattern-  
+http://www.example.com/index.html#hello |#products
+
+Steps:
+
+router/index.js
+
+import Home from '../components/Home.vue'
+import HelloWorld from '../components/HelloWorld.vue';
+import { createRouter, createWebHistory } from 'vue-router'
+
+
+//route configuration
+const routes = [
+    {
+        path: '/',
+        component: Home
+    },
+    {
+        path: '/hello',
+        component: HelloWorld
+    }
+]
+//create router object
+const router = createRouter({
+    history: createWebHistory(import.meta.env.BASE_URL),
+    routes
+})
+
+export default router;
+
+2.main.js
+import { createApp } from 'vue'
+import App from './App.vue'
+import router from './router'
+
+createApp(App)
+    .use(router)
+    .mount('#app')
+
+
+3.App.vue
+<script setup>
+import { RouterLink, RouterView } from 'vue-router'
+</script>
+<template>
+    <div>
+        <!-- Menu Bar -->
+        <nav>
+            <RouterLink to="/">Home</RouterLink>
+            <RouterLink to="/hello">Hello</RouterLink>
+        </nav>
+        <!-- Place Holder to display view based on route change -->
+        <RouterView></RouterView>
+    </div>
+</template>
+....................................................................................
+
+URL patterns:
+
+static url
+ '/hello'
+dynamic url
+ '/greet/:message'
+
+Dynamic Route parameter like message variable if you want to read inside component.
+
+if you are in old vue , there is object this.$route
+
+if you are in vue 3, composition api, with setup attribute/ function, we have  composobale apis
+
+useRouter
+useRoute - exposes all url related apis , like reading parameters
+
+"$route and $router are built in objects which can be still used inside template without using useRouter and useRoute api"
+
+
+components/Greeter.vue
+
+<script setup>
+import { watch,ref } from 'vue';
+import { useRoute } from 'vue-router';
+//Composable api to read params,query
+const route = useRoute()
+
+
+</script>
+<template>
+    <h1>{{ route.params.message }}</h1>
+    <!-- Directly you can access route information inside template -->
+    <h1>{{ $route.params.message }}</h1>
+
+</template>
+
+router/index.js
+import Greeter from '../components/Greeter.vue'
+import { createRouter, createWebHistory } from 'vue-router'
+
+
+//route configuration
+const routes = [
+   {
+        path: '/greet/:message',
+        component: Greeter
+    }
+]
+//create router object
+const router = createRouter({
+    history: createWebHistory(import.meta.env.BASE_URL),
+    routes
+})
+
+export default router;
+....................................................................................
+
+Not Found:
+if any url match is statisfied, we need to map to certain url
+
+  {
+        path: '/:pathMatch(.*)*',
+        name:'NotFound',
+        component: NotFound
+    }
+...................................................................................
+			   path match expression
+
+Vue router inspired from "express" js routing model
+
+static
+/users
+dynamic
+
+/users/:id
+
+Rules : regular expressions
+
+//order id must be number
+/orders/:orderId(\\+d) 
+
+/orders/:orderId? - optional parameter
+
+Valid url patterns
+/orders 
+/orders/1
+
+...................................................................................
+			Nested routing
+...................................................................................
+
+user
+ |
+ profile
+ post
+ comments
+
+/user/ram/profile
+/user/ram/posts
+/user/ram/comments
+
+
+import Home from '../components/Home.vue'
+import Greeter from '../components/Greeter.vue'
+import NotFound from '../components/NotFound.vue'
+import HelloWorld from '../components/HelloWorld.vue';
+import User from '../components/User.vue'
+import UserProfile from '../components/UserProfile.vue'
+import UserPost from '../components/UserPost.vue'
+
+import { createRouter, createWebHistory } from 'vue-router'
+
+
+//route configuration
+const routes = [
+    {
+        path: '/',
+        component: Home
+    }
+    {
+        path: '/user/:name',
+        component: User,
+        //nested routing
+        children: [
+            {
+                path: 'profile',
+                component: UserProfile
+            },
+            {
+                path: 'posts',
+                component: UserPost
+            }
+        ]
+    },
+    //will match everything and put under
+    {
+        path: '/:pathMatch(.*)*',
+        name: 'NotFound',
+        component: NotFound
+    }
+
+]
+//create router object
+const router = createRouter({
+    history: createWebHistory(import.meta.env.BASE_URL),
+    routes
+})
+
+export default router;
+
+
+App.vue
+<script setup>
+import { RouterLink, RouterView } from 'vue-router'
+</script>
+<template>
+    <div>
+        <!-- Menu Bar -->
+        <nav>
+            <RouterLink to="/">Home</RouterLink>
+            <RouterLink to="/hello">Hello</RouterLink>
+            <RouterLink to="/user/ram">User</RouterLink>
+
+        </nav>
+        <!-- Place Holder to display view based on route change -->
+        <RouterView></RouterView>
+    </div>
+</template>
+
+User.vue
+<script setup>
+import { RouterLink, RouterView } from 'vue-router'
+
+</script>
+<template>
+    <h1>User</h1>
+    <h1>{{ $route.params.name }} {{$route.path}} {{$route.fullPath}}</h1>
+    <nav>
+        <RouterLink to="/user/ram/profile">Profile</RouterLink>
+        <RouterLink to="/user/ram/posts">Posts</RouterLink>
+    </nav>
+    <!-- Nested View -->
+    <RouterView></RouterView>
+</template>
+.....................................................................................
+			   Programmetic Navigation
+.....................................................................................
+
+Declarative routing is implemneted via "router-link", Programmetic routing is implemented via "Router" Object
+
+Declarative:
+<router-link to="profile">
+
+Programmetic Routing
+const router = useRouter()
+
+router.push('url')
+router.push({path:'url'})
+
+  /greeter/foo => /greeter/:name
+router.push({path:'url',params:{name:'foo'}})
+
+//with query string
+ /users?order='asc'
+router.push({path:'url',query:{order:'asc'}})
+
+eg:
+
+List.vue
+<script setup>
+import { useRouter, useRoute } from 'vue-router';
+
+const router = useRouter()
+console.log(router)
+
+const goToPage = () => {
+    //redirect to HelloWorld Page
+    router.push({ path: 'hello' })
+}
+</script>
+<template>
+    <button @click="goToPage">Go to HelloWorld</button>
+    <button @click="$router.back">Back</button>
+
+</template>
+
+import Home from '../components/Home.vue'
+import Greeter from '../components/Greeter.vue'
+import NotFound from '../components/NotFound.vue'
+import HelloWorld from '../components/HelloWorld.vue';
+import User from '../components/User.vue'
+import UserProfile from '../components/UserProfile.vue'
+import UserPost from '../components/UserPost.vue'
+import List from '../components/List.vue'
+
+import { createRouter, createWebHistory } from 'vue-router'
+
+router/index.js
+
+//route configuration
+const routes = [
+    {
+        path: '/',
+        component: Home
+    },
+    {
+        path: '/hello',
+        component: HelloWorld
+    },
+    {
+        path: '/greet/:message',
+        component: Greeter
+    },
+    {
+        path: '/list',
+        component: List
+    },
+    {
+        path: '/user/:name',
+        component: User,
+        //nested routing
+        children: [
+            {
+                path: '/',
+                component: UserProfile
+            },
+            {
+                path: 'profile',
+                component: UserProfile
+            },
+            {
+                path: 'posts',
+                component: UserPost
+            }
+        ]
+    },
+    //will match everything and put under
+    {
+        path: '/:pathMatch(.*)*',
+        name: 'NotFound',
+        component: NotFound
+    }
+
+]
+//create router object
+const router = createRouter({
+    history: createWebHistory(import.meta.env.BASE_URL),
+    routes
+})
+
+export default router;
+....................................................................................
 
 
 

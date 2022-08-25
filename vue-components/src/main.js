@@ -2,7 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import StatusBar from './components/StatusBar.vue'
 import { myPlugin } from './plugins/myPlugin'
-
+import router from './router'
 // import './assets/main.css'
 
 // createApp(App).mount('#app')
@@ -43,5 +43,7 @@ app.directive('demo', (element, binding) => {
 
 //register plugin
 app.use(myPlugin)
+app.use(router)
+
 
 app.mount('#app')
